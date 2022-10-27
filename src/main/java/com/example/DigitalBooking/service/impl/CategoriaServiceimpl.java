@@ -1,6 +1,6 @@
 package com.example.DigitalBooking.service.impl;
 
-import com.example.DigitalBooking.DTO.CategoriaDTO;
+import com.example.DigitalBooking.model.CategoriaDTO;
 import com.example.DigitalBooking.model.Categorias;
 import com.example.DigitalBooking.repository.ICategoriaRepository;
 import com.example.DigitalBooking.service.ICategoriaService;
@@ -24,32 +24,34 @@ public class CategoriaServiceimpl implements ICategoriaService {
             categoriaRepository.save(categorias);
         }
     }
-    @Override
-    public Collection<CategoriaDTO> findAllCategoria() {
-        List<Categorias> categorias = categoriaRepository.findAll();
-        Set<CategoriaDTO> categoriaDTO = new HashSet<>() ;
 
-        for (Categorias categorias1 : categorias){
-            categoriaDTO.add(mapper.convertValue(categorias, CategoriaDTO.class));
-        }
-        return  categoriaDTO;
+
+
+    @Override
+    public Collection<CategoriaDTO> findAllCategorias() {
+        List<Categorias> todaCategoria = categoriaRepository.findAll();
+        Set<CategoriaDTO> todaCategoriaDTO = new HashSet<CategoriaDTO>();
+        for(Categorias categorias: todaCategoria)
+            todaCategoriaDTO.add(mapper.convertValue(categorias,CategoriaDTO.class));
+
+        return todaCategoriaDTO;
     }
+
 
     @Override
     public CategoriaDTO findCategoriaById(Long id) {
-        Categorias categorias = (Categorias) categoriaRepository.findAllById(Collections.singleton(id));
+        Optional<Categorias> categorias = categoriaRepository.findById(id);
         CategoriaDTO categoriaDTO = null;
 
-        if(categorias != null){
+        if(categorias.isPresent()){
             categoriaDTO = mapper.convertValue(categorias, CategoriaDTO.class);
         }
         return categoriaDTO;
-
     }
 
     @Override
     public void saveCategoria(CategoriaDTO newCategoriaDTO) {
-    saveMethod(newCategoriaDTO);
+    guardarCategoria(newCategoriaDTO);
     }
 
     @Override
@@ -61,6 +63,10 @@ public class CategoriaServiceimpl implements ICategoriaService {
 
     @Override
     public void updateCategoria(CategoriaDTO newCategoriaDTO) {
-        saveMethod(newCategoriaDTO);
+        guardarCategoria(newCategoriaDTO);
+    }
+    private void guardarCategoria(CategoriaDTO categoriasDTO){
+        Categorias newCategoria = mapper.convertValue(categoriasDTO, Categorias.class);
+        categoriaRepository.save(newCategoria);
     }
 }

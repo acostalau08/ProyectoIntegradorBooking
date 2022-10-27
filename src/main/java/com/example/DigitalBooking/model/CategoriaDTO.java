@@ -1,13 +1,16 @@
-package com.example.DigitalBooking.DTO;
+package com.example.DigitalBooking.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoriaDTO {
+
+public class CategoriaDTO  {
     private Long id;
     private String titulo;
     private String descripcion;
     private String urlImg;
+
+
 }
